@@ -172,6 +172,9 @@ defaults (those are documented in comments)
   // absence defaults to false
   "bump-patch-for-minor-pre-major": true,
 
+  // setting the type of prerelease in case of prerelease strategy
+  "prerelease-type": "beta",
+
   // set default conventional commit => changelog sections mapping/appearance.
   // absence defaults to https://git.io/JqCZL
   "changelog-sections": [...],
@@ -491,6 +494,23 @@ When using the `node-workspace` tool, breaking versions bumps will be included i
 your update pull request. If you don't agree with this behavior and would only like
 your local dependencies bumped if they are within the SemVer range, you can set the
 `"always-link-local"` option to `false` in your manifest config.
+
+#### Linking peer dependencies
+
+By default, the `node-workspace` plugin doesn't modify `peerDependencies` fields in
+package.json. If you would like version bumps to be also linked in `peerDependencies`
+fields, set `"updatePeerDependencies"` to `true` in your manifest plugin config.
+
+```
+{
+  "plugins": [
+    {
+      "type": "node-workspace",
+      "updatePeerDependencies": true
+    }
+  ]
+}
+```
 
 ### cargo-workspace
 

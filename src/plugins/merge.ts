@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ManifestPlugin, ManifestPluginOptions} from '../plugin';
+import {ManifestPlugin} from '../plugin';
 import {
   CandidateReleasePullRequest,
   RepositoryConfig,
@@ -25,11 +25,11 @@ import {BranchName} from '../util/branch-name';
 import {Update} from '../update';
 import {mergeUpdates} from '../updaters/composite';
 import {GitHub} from '../github';
-import {ReleasePullRequest} from '../release-pull-request';
 
-interface MergeOptions extends ManifestPluginOptions {
+export interface MergeOptions {
   pullRequestTitlePattern?: string;
   pullRequestHeader?: string;
+  pullRequestFooter?: string;
   headBranchName?: string;
   forceMerge?: boolean;
 }
@@ -43,20 +43,21 @@ interface MergeOptions extends ManifestPluginOptions {
 export class Merge extends ManifestPlugin {
   private pullRequestTitlePattern?: string;
   private pullRequestHeader?: string;
+  private pullRequestFooter?: string;
   private headBranchName?: string;
   private forceMerge: boolean;
 
   constructor(
     github: GitHub,
     targetBranch: string,
-    manifestPath: string,
     repositoryConfig: RepositoryConfig,
     options: MergeOptions = {}
   ) {
-    super(github, targetBranch, manifestPath, repositoryConfig, options);
+    super(github, targetBranch, repositoryConfig);
     this.pullRequestTitlePattern =
       options.pullRequestTitlePattern ?? MANIFEST_PULL_REQUEST_TITLE_PATTERN;
     this.pullRequestHeader = options.pullRequestHeader;
+    this.pullRequestFooter = options.pullRequestFooter;
     this.headBranchName = options.headBranchName;
     this.forceMerge = options.forceMerge ?? false;
   }
@@ -100,30 +101,24 @@ export class Merge extends ManifestPlugin {
     }
     const updates = mergeUpdates(rawUpdates);
 
-    const pullRequest: ReleasePullRequest = {
+    const pullRequest = {
       title: PullRequestTitle.ofComponentTargetBranchVersion(
         rootRelease?.pullRequest.title.component,
         this.targetBranch,
-        this.changesBranch,
         rootRelease?.pullRequest.title.version,
         this.pullRequestTitlePattern
       ),
       body: new PullRequestBody(releaseData, {
         useComponents: true,
         header: this.pullRequestHeader,
+        footer: this.pullRequestFooter,
       }),
       updates,
       labels: Array.from(labels),
       headRefName:
         this.headBranchName ??
-        BranchName.ofTargetBranch(
-          this.targetBranch,
-          this.changesBranch
-        ).toString(),
+        BranchName.ofTargetBranch(this.targetBranch).toString(),
       draft: !candidates.some(candidate => !candidate.pullRequest.draft),
-      conventionalCommits: candidates.flatMap(
-        c => c.pullRequest.conventionalCommits
-      ),
     };
 
     const releaseTypes = new Set(

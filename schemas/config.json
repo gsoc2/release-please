@@ -20,6 +20,10 @@
           "description": "Feature changes only bump semver patch if version < 1.0.0",
           "type": "boolean"
         },
+        "prerelease-type": {
+          "description": "Configuration option for the prerelese versioning strategy. If prerelease strategy used and type set, will set the prerelese part of the version to the provided value in case prerelease part is not present.",
+          "type": "string"
+        },
         "versioning": {
           "description": "Versioning strategy. Defaults to `default`",
           "type": "string"
@@ -43,10 +47,7 @@
                 "type": "boolean"
               }
             },
-            "required": [
-              "type",
-              "section"
-            ]
+            "required": ["type", "section"]
           }
         },
         "release-as": {
@@ -84,10 +85,7 @@
         "changelog-type": {
           "description": "The type of changelog to use. Defaults to `default`.",
           "type": "string",
-          "enum": [
-            "default",
-            "github"
-          ]
+          "enum": ["default", "github"]
         },
         "changelog-host": {
           "description": "Generate changelog links to this GitHub host. Useful for running against GitHub Enterprise.",
@@ -105,6 +103,10 @@
           "description": "Customize the release pull request header.",
           "type": "string"
         },
+        "pull-request-footer": {
+          "description": "Customize the release pull request footer.",
+          "type": "string"
+        },
         "separate-pull-requests": {
           "description": "Open a separate release pull request for each component. Defaults to `false`.",
           "type": "boolean"
@@ -112,13 +114,6 @@
         "tag-separator": {
           "description": "Customize the separator between the component and version in the GitHub tag.",
           "type": "string"
-        },
-        "reviewers": {
-          "description": "Github usernames that should be assigned as reviewers to the release pull request",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "extra-files": {
           "description": "Specify extra generic files to replace versions.",
@@ -135,11 +130,7 @@
                 "properties": {
                   "type": {
                     "description": "The file format type.",
-                    "enum": [
-                      "json",
-                      "toml",
-                      "yaml"
-                    ]
+                    "enum": ["json", "toml", "yaml"]
                   },
                   "path": {
                     "description": "The path to the file.",
@@ -154,11 +145,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "type",
-                  "path",
-                  "jsonpath"
-                ]
+                "required": ["type", "path", "jsonpath"]
               },
               {
                 "description": "An extra XML file with a targeted update via xpath.",
@@ -166,9 +153,7 @@
                 "properties": {
                   "type": {
                     "description": "The file format type.",
-                    "enum": [
-                      "xml"
-                    ]
+                    "enum": ["xml"]
                   },
                   "path": {
                     "description": "The path to the file.",
@@ -183,11 +168,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "type",
-                  "path",
-                  "xpath"
-                ]
+                "required": ["type", "path", "xpath"]
               },
               {
                 "description": "An extra pom.xml file.",
@@ -195,9 +176,7 @@
                 "properties": {
                   "type": {
                     "description": "The file format type.",
-                    "enum": [
-                      "pom"
-                    ]
+                    "enum": ["pom"]
                   },
                   "path": {
                     "description": "The path to the file.",
@@ -208,10 +187,7 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "type",
-                  "path"
-                ]
+                "required": ["type", "path"]
               }
             ]
           }
@@ -288,9 +264,7 @@
                   "type": {
                     "description": "The name of the plugin.",
                     "type": "string",
-                    "enum": [
-                      "linked-versions"
-                    ]
+                    "enum": ["linked-versions"]
                   },
                   "groupName": {
                     "description": "The name of the group of components.",
@@ -315,11 +289,7 @@
                     }
                   }
                 },
-                "required": [
-                  "type",
-                  "groupName",
-                  "components"
-                ]
+                "required": ["type", "groupName", "components"]
               },
               {
                 "description": "Configuration for various `workspace` plugins.",
@@ -330,8 +300,7 @@
                     "type": "string",
                     "enum": [
                       "cargo-workspace",
-                      "maven-workspace",
-                      "node-workspace"
+                      "maven-workspace"
                     ]
                   },
                   "updateAllPackages": {
@@ -349,15 +318,42 @@
                 }
               },
               {
-                "description": "Configuration for various `group-priority` plugin",
+                "description": "Configuration for various `workspace` plugins.",
                 "type": "object",
                 "properties": {
                   "type": {
                     "description": "The name of the plugin.",
                     "type": "string",
                     "enum": [
-                      "group-priority"
+                      "node-workspace"
                     ]
+                  },
+                  "updateAllPackages": {
+                    "description": "Whether to force updating all packages regardless of the dependency tree. Defaults to `false`.",
+                    "type": "boolean"
+                  },
+                  "merge": {
+                    "description": "Whether to merge in-scope pull requests into a combined release pull request. Defaults to `true`.",
+                    "type": "boolean"
+                  },
+                  "considerAllArtifacts": {
+                    "description": "Whether to analyze all packages in the workspace for cross-component version bumping. This currently only works for the maven-workspace plugin. Defaults to `true`.",
+                    "type": "boolean"
+                  },
+                  "updatePeerDependencies": {
+                    "description": "Also bump peer dependency versions if they are modified. Defaults to `false`.",
+                    "type": "boolean"
+                  }
+                }
+              },
+              {
+                "description": "Configuration for various `group-priority` plugin",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "description": "The name of the plugin.",
+                    "type": "string",
+                    "enum": ["group-priority"]
                   },
                   "groups": {
                     "description": "Group names ordered with highest priority first.",
@@ -404,15 +400,9 @@
         "release-label": {
           "description": "Comma-separated list of labels to add to a pull request that has been released/tagged",
           "type": "string"
-        },
-        "prerelease-label": {
-          "description": "Comma-separated list of labels to add to a pull request to denote the release should be marked as pre-release",
-          "type": "string"
         }
       },
-      "required": [
-        "packages"
-      ]
+      "required": ["packages"]
     }
   ],
   "properties": {
@@ -438,7 +428,6 @@
     "draft-pull-request": true,
     "label": true,
     "release-label": true,
-    "prerelease-label": true,
     "extra-label": true,
     "include-component-in-tag": true,
     "include-v-in-tag": true,
@@ -447,10 +436,10 @@
     "changelog-path": true,
     "pull-request-title-pattern": true,
     "pull-request-header": true,
+    "pull-request-footer": true,
     "separate-pull-requests": true,
     "tag-separator": true,
     "extra-files": true,
-    "reviewers": true,
     "version-file": true,
     "snapshot-label": true,
     "initial-version": true,

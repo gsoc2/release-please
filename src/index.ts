@@ -13,47 +13,55 @@
 // limitations under the License.
 
 export * as Errors from './errors';
-export {Manifest} from './manifest';
-export type {ReleaserConfig, ManifestOptions, PluginType} from './manifest';
-export type {Commit, ConventionalCommit} from './commit';
-export type {Strategy} from './strategy';
-export type {BaseStrategyOptions, BuildUpdatesOptions} from './strategies/base';
-export type {ReleaseBuilder, ReleaseType} from './factory';
-export {getReleaserTypes, registerReleaseType} from './factory';
-export type {
+export {
+  Manifest,
+  ReleaserConfig,
+  ManifestOptions,
+  PluginType,
+  CandidateRelease,
+  CreatedRelease,
+} from './manifest';
+export {ReleasePullRequest} from './release-pull-request';
+export {PullRequest} from './pull-request';
+export {Commit, ConventionalCommit} from './commit';
+export {Strategy} from './strategy';
+export {BaseStrategyOptions, BuildUpdatesOptions} from './strategies/base';
+export {
+  ReleaseBuilder,
+  ReleaseType,
+  getReleaserTypes,
+  registerReleaseType,
+} from './factory';
+export {
   ChangelogNotesBuilder,
   ChangelogNotesFactoryOptions,
   ChangelogNotesType,
-} from './factories/changelog-notes-factory';
-export {
   getChangelogTypes,
   registerChangelogNotes,
 } from './factories/changelog-notes-factory';
-export type {
+export {
   PluginBuilder,
   PluginFactoryOptions,
   getPluginTypes,
   registerPlugin,
 } from './factories/plugin-factory';
-export type {
+export {
   VersioningStrategyBuilder,
   VersioningStrategyFactoryOptions,
   VersioningStrategyType,
-} from './factories/versioning-strategy-factory';
-export {
   getVersioningStrategyTypes,
   registerVersioningStrategy,
 } from './factories/versioning-strategy-factory';
-export type {
+export {
   BuildNotesOptions,
   ChangelogNotes,
   ChangelogSection,
 } from './changelog-notes';
-export type {Logger} from './util/logger';
-export {setLogger} from './util/logger';
+export {Logger, setLogger} from './util/logger';
 export {GitHub} from './github';
+export const configSchema = require('../../schemas/config.json');
+export const manifestSchema = require('../../schemas/manifest.json');
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export import configSchema = require('../schemas/config.json');
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export import manifestSchema = require('../schemas/manifest.json');
+// x-release-please-start-version
+export const VERSION = '16.7.0';
+// x-release-please-end

@@ -30,7 +30,7 @@ import {DEFAULT_SNAPSHOT_LABELS} from '../manifest';
 import {JavaReleased} from '../updaters/java/java-released';
 import {mergeUpdates} from '../updaters/composite';
 import {logger as defaultLogger} from '../util/logger';
-import {PullRequest} from '../pull-request';
+import {BumpReleaseOptions} from '../strategy';
 
 const CHANGELOG_SECTIONS = [
   {type: 'feat', section: 'Features'},
@@ -74,20 +74,13 @@ export class Java extends BaseStrategy {
     this.skipSnapshot = options.skipSnapshot ?? false;
   }
 
-  async buildReleasePullRequest({
-    commits,
-    labels = [],
-    latestRelease,
-    draft,
-    manifestPath,
-  }: {
-    commits: ConventionalCommit[];
-    latestRelease?: Release;
-    draft?: boolean;
-    labels?: string[];
-    existingPullRequest?: PullRequest;
-    manifestPath?: string;
-  }): Promise<ReleasePullRequest | undefined> {
+  async buildReleasePullRequest(
+    commits: ConventionalCommit[],
+    latestRelease?: Release,
+    draft?: boolean,
+    labels: string[] = [],
+    _bumpOnlyOptions?: BumpReleaseOptions
+  ): Promise<ReleasePullRequest | undefined> {
     if (await this.needsSnapshot(commits, latestRelease)) {
       this.logger.info('Repository needs a snapshot bump.');
       return await this.buildSnapshotPullRequest(
@@ -97,13 +90,12 @@ export class Java extends BaseStrategy {
       );
     }
     this.logger.info('No Java snapshot needed');
-    return await super.buildReleasePullRequest({
+    return await super.buildReleasePullRequest(
       commits,
       latestRelease,
       draft,
-      labels,
-      manifestPath,
-    });
+      labels
+    );
   }
 
   protected async buildSnapshotPullRequest(
@@ -125,16 +117,11 @@ export class Java extends BaseStrategy {
     const pullRequestTitle = PullRequestTitle.ofComponentTargetBranchVersion(
       component || '',
       this.targetBranch,
-      this.changesBranch,
       newVersion
     );
     const branchName = component
-      ? BranchName.ofComponentTargetBranch(
-          component,
-          this.targetBranch,
-          this.changesBranch
-        )
-      : BranchName.ofTargetBranch(this.targetBranch, this.changesBranch);
+      ? BranchName.ofComponentTargetBranch(component, this.targetBranch)
+      : BranchName.ofTargetBranch(this.targetBranch);
     const notes =
       '### Updating meta-information for bleeding-edge SNAPSHOT release.';
     // TODO use pullrequest header here?
@@ -162,10 +149,8 @@ export class Java extends BaseStrategy {
       labels: [...labels, ...this.extraLabels],
       headRefName: branchName.toString(),
       version: newVersion,
-      previousVersion: latestRelease?.tag.version,
       draft: draft ?? false,
       group: 'snapshot',
-      conventionalCommits: [],
     };
   }
 

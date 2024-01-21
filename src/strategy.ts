@@ -19,10 +19,13 @@ import {Commit} from './commit';
 import {VersioningStrategy} from './versioning-strategy';
 import {ChangelogNotes} from './changelog-notes';
 import {Version} from './version';
-import {BranchName} from './util/branch-name';
 
 export interface BuildReleaseOptions {
   groupPullRequestTitlePattern?: string;
+}
+
+export interface BumpReleaseOptions {
+  newVersion: Version;
 }
 
 /**
@@ -40,19 +43,21 @@ export interface Strategy {
    *   component if available.
    * @param {boolean} draft Optional. Whether or not to create the pull
    *   request as a draft. Defaults to `false`.
-   * @param {string[]} labels Optional.
-   * @param {PullRequest} existingPullRequest Optional. A pull request already existing for this branch.
-   * @returns {ReleasePullRequest | undefined} The release pull request to open for this path/component. Returns
-   * undefined if we should not open a pull request.
+   * @param {BumpReleaseOptions} bumpOnlyOptions Optional. Options, that when
+   * present, indicate a release should be created even if there are no
+   * conventional commits. This is used when a release is required for
+   * a dependency update with a workspace plugin.
+   * @returns {ReleasePullRequest | undefined} The release pull request to
+   *   open for this path/component. Returns undefined if we should not
+   *   open a pull request.
    */
-  buildReleasePullRequest(opts: {
-    commits: Commit[];
-    latestRelease?: Release;
-    draft?: boolean;
-    labels?: string[];
-    existingPullRequest?: PullRequest;
-    manifestPath?: string;
-  }): Promise<ReleasePullRequest | undefined>;
+  buildReleasePullRequest(
+    commits: Commit[],
+    latestRelease?: Release,
+    draft?: boolean,
+    labels?: string[],
+    bumpOnlyOptions?: BumpReleaseOptions
+  ): Promise<ReleasePullRequest | undefined>;
 
   /**
    * Given a merged pull request, build the candidate release.
@@ -87,8 +92,6 @@ export interface Strategy {
    * @returns {string}
    */
   getBranchComponent(): Promise<string | undefined>;
-
-  getBranchName(): Promise<BranchName>;
 
   /**
    * Validate whether version is a valid release.

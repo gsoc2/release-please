@@ -499,6 +499,115 @@
 * release PRs should target main to update changelog, manifest, etc ([b44b1c5](https://github.com/stainless-api/release-please/commit/b44b1c5a716639e7ef6215fef4aa718a3800c2cd))
 * use merge no-ff instead of rebase ([d67f3bf](https://github.com/stainless-api/release-please/commit/d67f3bf7ea9e39691cdbba34372b6e24aef143f0))
 
+## [16.7.0](https://github.com/googleapis/release-please/compare/v16.6.0...v16.7.0) (2024-01-03)
+
+
+### Features
+
+* **node-workspace:** add root package-lock.json ([#2162](https://github.com/googleapis/release-please/issues/2162)) ([8728d4a](https://github.com/googleapis/release-please/commit/8728d4ab53b46198b03e4f71875efee2e542d9af))
+
+## [16.6.0](https://github.com/googleapis/release-please/compare/v16.5.1...v16.6.0) (2023-12-28)
+
+
+### Features
+
+* **node-workspace:** use configured strategies to build new dependent version bumps ([#2112](https://github.com/googleapis/release-please/issues/2112)) ([de4088b](https://github.com/googleapis/release-please/commit/de4088b15374f76596d252136152263c37cfefef))
+
+## [16.5.1](https://github.com/googleapis/release-please/compare/v16.5.0...v16.5.1) (2023-12-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @google-automations/git-file-utils to v2 ([#2081](https://github.com/googleapis/release-please/issues/2081)) ([9b745d5](https://github.com/googleapis/release-please/commit/9b745d572ebc2d125538df3b13ddd6a3983841bb))
+* **deps:** update dependency xpath to ^0.0.34 ([#2169](https://github.com/googleapis/release-please/issues/2169)) ([3f7045e](https://github.com/googleapis/release-please/commit/3f7045ebbd800870659ccd0ae330b5b8f8daf47d))
+* **node:** correctly detect &gt;=, &lt;= over >, < when replacing version ranges ([#2171](https://github.com/googleapis/release-please/issues/2171)) ([47fe582](https://github.com/googleapis/release-please/commit/47fe582a373eb62471e2c7f39b58a5d982c8e3a6))
+
+## [16.5.0](https://github.com/googleapis/release-please/compare/v16.4.1...v16.5.0) (2023-12-11)
+
+
+### Features
+
+* export current release-please version as VERSION constant ([#2159](https://github.com/googleapis/release-please/issues/2159)) ([264af84](https://github.com/googleapis/release-please/commit/264af8412faa20b818516efba0bb847720fc0d2a))
+
+## [16.4.1](https://github.com/googleapis/release-please/compare/v16.4.0...v16.4.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* **node-workspace:** Add update-peer-dependencies option that also updates peer dependencies ([#2094](https://github.com/googleapis/release-please/issues/2094)) ([c84414a](https://github.com/googleapis/release-please/commit/c84414a3192cca65da4469c7559460624446c898))
+* pass pull request header and footer options to merge plugin ([#2143](https://github.com/googleapis/release-please/issues/2143)) ([e848100](https://github.com/googleapis/release-please/commit/e8481007981cf9fa3f476f65db4d3de807259e89))
+
+## [16.4.0](https://github.com/googleapis/release-please/compare/v16.3.1...v16.4.0) (2023-12-05)
+
+
+### Features
+
+* **types:** Export types exposed by Manifest for use downstream ([#2147](https://github.com/googleapis/release-please/issues/2147)) ([b259d70](https://github.com/googleapis/release-please/commit/b259d70270bd1c4358267aeff07de6aaaeddd9b9))
+* Update VERSION file in PHP repo if it exists ([#2153](https://github.com/googleapis/release-please/issues/2153)) ([a7d3b73](https://github.com/googleapis/release-please/commit/a7d3b73e605d0425b4a54a11ff2723a3075b4d3c))
+
+## [16.3.1](https://github.com/googleapis/release-please/compare/v16.3.0...v16.3.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* Backfill files by commit for rebased PRs ([#2141](https://github.com/googleapis/release-please/issues/2141)) ([ee6d82f](https://github.com/googleapis/release-please/commit/ee6d82ffd27dd121fd0d73437456680d9d54dc98))
+* Pass prerelease to buildVersioningStrategy ([#2133](https://github.com/googleapis/release-please/issues/2133)) ([c9450df](https://github.com/googleapis/release-please/commit/c9450dffd7af3646a214d01a9b368ebab720be53))
+
+## [16.3.0](https://github.com/googleapis/release-please/compare/v16.2.0...v16.3.0) (2023-11-10)
+
+
+### Features
+
+* **deps:** Refactor node-workspace plugin to drop lerna-lite/core ([#2117](https://github.com/googleapis/release-please/issues/2117)) ([65fa72e](https://github.com/googleapis/release-please/commit/65fa72eb2f7931768d6aae5a45f04f037fe4f06a))
+
+## [16.2.0](https://github.com/googleapis/release-please/compare/v16.1.0...v16.2.0) (2023-11-08)
+
+
+### Features
+
+* Allow customizing PR body footer ([#2115](https://github.com/googleapis/release-please/issues/2115)) ([43014a1](https://github.com/googleapis/release-please/commit/43014a1f15d3640d67cb90cbf3047919facfa53e))
+
+
+### Bug Fixes
+
+* Correctly parse standalone prerelease PR body ([#2123](https://github.com/googleapis/release-please/issues/2123)) ([5ee9e3e](https://github.com/googleapis/release-please/commit/5ee9e3e9ae292dc4128717c3d5924da93b3bb670))
+* Set PR labels serially ([#2122](https://github.com/googleapis/release-please/issues/2122)) ([bf58911](https://github.com/googleapis/release-please/commit/bf58911d989f08abe3105309b6e6f918186e1125))
+
+## [16.1.0](https://github.com/googleapis/release-please/compare/v16.0.0...v16.1.0) (2023-10-26)
+
+
+### Features
+
+* Implement custom prerelease type ([#2083](https://github.com/googleapis/release-please/issues/2083)) ([97b0542](https://github.com/googleapis/release-please/commit/97b05421168316a23592897c8853893adf08d24c))
+* Update package-lock.json workspace entry versions ([#2088](https://github.com/googleapis/release-please/issues/2088)) ([dbb11bc](https://github.com/googleapis/release-please/commit/dbb11bc62d6c8135b5b168354e8f235398ffab03)), closes [#1993](https://github.com/googleapis/release-please/issues/1993)
+
+
+### Bug Fixes
+
+* Releasable units should use version from pull-request body ([#2102](https://github.com/googleapis/release-please/issues/2102)) ([db035b7](https://github.com/googleapis/release-please/commit/db035b798f33c5ce0ddf2a43dcf2458c170c8fe3)), closes [#2101](https://github.com/googleapis/release-please/issues/2101)
+
+## [16.0.0](https://github.com/googleapis/release-please/compare/v15.13.0...v16.0.0) (2023-09-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* require node 18+ ([#2069](https://github.com/googleapis/release-please/issues/2069))
+
+### Features
+
+* Fallback to root package version if package ignores github release ([#1935](https://github.com/googleapis/release-please/issues/1935)) ([0e11d4c](https://github.com/googleapis/release-please/commit/0e11d4c019f1e33cd713a237e037f31397d5371a))
+* Require node 18+ ([#2069](https://github.com/googleapis/release-please/issues/2069)) ([5a50247](https://github.com/googleapis/release-please/commit/5a5024727b93d0ba557b6f7ee5c6c1bab8d723d6))
+* Support pnpm workspaces ([#2058](https://github.com/googleapis/release-please/issues/2058)) ([13cba14](https://github.com/googleapis/release-please/commit/13cba14225cb836c74199d726a996f83122fab07))
+* Use default updaters based on file extension ([#2072](https://github.com/googleapis/release-please/issues/2072)) ([1ee162b](https://github.com/googleapis/release-please/commit/1ee162b3344e986afd09275f6762624e4a49faae))
+
+
+### Bug Fixes
+
+* **deps:** Bump semver dependency version ([#2068](https://github.com/googleapis/release-please/issues/2068)) ([cd0bd85](https://github.com/googleapis/release-please/commit/cd0bd853ac23087e5d5348c22f032fe0e533451d))
+* **deps:** Replace lerna dependency with lerna-lite ([13cba14](https://github.com/googleapis/release-please/commit/13cba14225cb836c74199d726a996f83122fab07))
+* **deps:** Upgrade http-proxy-agent to v7 ([#2071](https://github.com/googleapis/release-please/issues/2071)) ([cc50a34](https://github.com/googleapis/release-please/commit/cc50a34dee16115c07e574b05552678108f9e0c3))
+* **deps:** Upgrade https-proxy-agent to v7 ([cc50a34](https://github.com/googleapis/release-please/commit/cc50a34dee16115c07e574b05552678108f9e0c3))
+
 ## [15.13.0](https://github.com/googleapis/release-please/compare/v15.12.0...v15.13.0) (2023-08-18)
 
 

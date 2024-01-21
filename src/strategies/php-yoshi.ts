@@ -29,7 +29,7 @@ import {BranchName} from '../util/branch-name';
 import {PullRequestBody} from '../util/pull-request-body';
 import {GitHubFileContents} from '@google-automations/git-file-utils';
 import {FileNotFoundError} from '../errors';
-import {PullRequest} from '../pull-request';
+import {BumpReleaseOptions} from '../strategy';
 
 const CHANGELOG_SECTIONS = [
   {type: 'feat', section: 'Features'},
@@ -65,23 +65,17 @@ export class PHPYoshi extends BaseStrategy {
       changelogSections: CHANGELOG_SECTIONS,
     });
   }
-  async buildReleasePullRequest({
-    commits,
-    labels = [],
-    latestRelease,
-    draft,
-  }: {
-    commits: Commit[];
-    latestRelease?: Release;
-    draft?: boolean;
-    labels?: string[];
-    existingPullRequest?: PullRequest;
-    manifestPath?: string;
-  }): Promise<ReleasePullRequest | undefined> {
+  async buildReleasePullRequest(
+    commits: Commit[],
+    latestRelease?: Release,
+    draft?: boolean,
+    labels: string[] = [],
+    bumpOnlyOptions?: BumpReleaseOptions
+  ): Promise<ReleasePullRequest | undefined> {
     const conventionalCommits = await this.postProcessCommits(
       parseConventionalCommits(commits, this.logger)
     );
-    if (conventionalCommits.length === 0) {
+    if (!bumpOnlyOptions && conventionalCommits.length === 0) {
       this.logger.info(`No commits for path: ${this.path}, skipping`);
       return undefined;
     }
@@ -104,12 +98,12 @@ export class PHPYoshi extends BaseStrategy {
       try {
         const contents = await this.github.getFileContentsOnBranch(
           this.addPath(`${directory}/VERSION`),
-          this.changesBranch
+          this.targetBranch
         );
         const version = Version.parse(contents.parsedContent);
         const composer = await this.github.getFileJson<ComposerJson>(
           this.addPath(`${directory}/composer.json`),
-          this.changesBranch
+          this.targetBranch
         );
         directoryVersionContents[directory] = {
           versionContents: contents,
@@ -130,7 +124,6 @@ export class PHPYoshi extends BaseStrategy {
             previousTag: latestRelease?.tag?.toString(),
             currentTag: newVersionTag.toString(),
             targetBranch: this.targetBranch,
-            changesBranch: this.changesBranch,
             changelogSections: this.changelogSections,
           }
         );
@@ -149,21 +142,14 @@ export class PHPYoshi extends BaseStrategy {
         }
       }
     }
-
     const pullRequestTitle = PullRequestTitle.ofComponentTargetBranchVersion(
       component || '',
       this.targetBranch,
-      this.changesBranch,
       newVersion
     );
     const branchName = component
-      ? BranchName.ofComponentTargetBranch(
-          component,
-          this.targetBranch,
-          this.changesBranch
-        )
-      : BranchName.ofTargetBranch(this.targetBranch, this.changesBranch);
-
+      ? BranchName.ofComponentTargetBranch(component, this.targetBranch)
+      : BranchName.ofTargetBranch(this.targetBranch);
     const updates = await this.buildUpdates({
       changelogEntry: releaseNotesBody,
       newVersion,
@@ -214,9 +200,7 @@ export class PHPYoshi extends BaseStrategy {
       labels: [...labels, ...this.extraLabels],
       headRefName: branchName.toString(),
       version: newVersion,
-      previousVersion: latestRelease?.tag.version,
       draft: draft ?? false,
-      conventionalCommits,
     };
   }
 
